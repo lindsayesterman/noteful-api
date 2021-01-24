@@ -67,21 +67,27 @@ notesRouter
       })
       .catch(next)
   })
+  
   .get((req, res, next) => {
     res.json(serializeNote(res.note))
   })
+
   .delete((req, res, next) => {
     NotesService.deleteNote(
       req.app.get('db'),
       req.params.note_id
     )
       .then(numRowsAffected => {
-        return res.status(204).json({
+        console.log("delete on the server side")
+        return res
+        .json({
            success: true 
         })
+        .status(204)
+      })
       .catch(next)
   })
-})
+
   .patch(jsonParser, (req, res, next) => {
     const { note_name, note_content, folder_id } = req.body
     const noteToUpdate = { note_name, note_content, folder_id }
